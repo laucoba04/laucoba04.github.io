@@ -1,1 +1,389 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Template carte modifiable style Blood Bowl vertical</title>
+  <style>
+    :root {
+      --blue: #0b3b6f;
+      --red: #bd2323;
+      --light: #e9f1fb;
+      --gold: #f1c33a;
+      --card-w: 520px;
+      --card-h: 760px;
+      --gutter: 18px;
+      --radius: 18px;
+      --accent: var(--gold);
+    }
+    html {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, #f4f7fb, #eaf1fb);
+      min-height: 100vh;
+      margin: 0;
+    }
+    .toolbar {
+      position: fixed;
+      top: var(--gutter);
+      left: var(--gutter);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .toolbar input[type=file] {
+      display: none;
+    }
+    .btn {
+      background: var(--blue);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(11, 59, 111, 0.15);
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #092e57;
+    }
+    .btn.secondary {
+      background: var(--red);
+    }
+    .btn.secondary:hover {
+      background: #971d1d;
+    }
+
+    /* Card */
+    .card {
+      width: var(--card-w);
+      height: var(--card-h);
+      background: linear-gradient(180deg, #0d7385, #06305a);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      gap: 12px;
+      color: white;
+      box-shadow: 0 10px 30px rgba(3, 22, 47, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Left stats column style Blood Bowl vertical labels */
+    .left {
+      width: 140px;
+      background: var(--red);
+      border-radius: 12px;
+      padding: 8px 6px 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      border: 3px solid var(--gold);
+      box-shadow: 0 0 0 3px #132c65, 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+    .stat {
+      position: relative;
+      background: var(--red);
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 18px;
+      height: 64px;
+    }
+    .stat .label {
+      position: absolute;
+      left: 6px;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+      font-family: 'Impact', 'Princetown LET', sans-serif;
+      color: #fff;
+      font-size: 22px;
+      letter-spacing: 1px;
+      user-select: none;
+      width: 20px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .stat .value {
+      margin-left: 28px;
+      font-family: 'Impact', 'Princetown LET', sans-serif;
+      color: var(--gold);
+      font-size: 40px;
+      font-weight: bold;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      outline: none;
+      cursor: text;
+    }
+
+    .gp {
+      background: #132c65;
+      color: #fff;
+      font-weight: bold;
+      border-radius: 8px;
+      border: 3px solid var(--gold);
+      padding: 8px 0;
+      text-align: center;
+      font-family: 'Impact', 'Princetown LET', sans-serif;
+      font-size: 18px;
+      user-select: text;
+      cursor: text;
+      outline: none;
+      margin-top: 8px;
+    }
+
+    /* Right area unchanged */
+    .right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .logo {
+      font-weight: 800;
+      letter-spacing: 1px;
+      font-size: 20px;
+      color: var(--light);
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .portrait {
+      flex: 1;
+      background: linear-gradient(180deg, #9E9E9E, #FFFFFF);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+    .nameRow {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .name {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--light);
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+    }
+    .subTitle {
+      font-size: 13px;
+      opacity: 0.9;
+      color: rgba(255, 255, 255, 0.85);
+    }
+    .range-box {
+      background: rgba(255, 255, 255, 0.08);
+      padding: 6px;
+      border-radius: 6px;
+      font-size: 12px;
+    }
+    .box {
+      background: rgba(255, 255, 255, 0.95);
+      color: var(--blue);
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .box h4 {
+      margin: 0 0 6px 0;
+      font-size: 13px;
+      color: #b02b2b;
+    }
+    .box .editable {
+      min-height: 36px;
+    }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .text-light {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    @media(max-width: 560px) {
+      .card {
+        transform: scale(0.86);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <label class="btn" title="Changer la figurine">
+      Changer image
+      <input id="imgInput" type="file" accept="image/*" />
+    </label>
+    <button id="exportPng" class="btn secondary">Exporter PNG</button>
+    <button id="copyHtml" class="btn">Copier HTML</button>
+  </div>
+
+  <div id="card" class="card" role="application" aria-label="Carte modifiable">
+    <div class="left" aria-hidden="false">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:space-between">
+        <div class="stat">
+          <div class="label">M</div>
+          <div class="value" contenteditable="true" id="statMA">6</div>
+        </div>
+        <div class="stat">
+          <div class="label">F</div>
+          <div class="value" contenteditable="true" id="statST">3</div>
+        </div>
+        <div class="stat">
+          <div class="label">AG</div>
+          <div class="value" contenteditable="true" id="statAG">3+</div>
+        </div>
+        <div class="stat">
+          <div class="label">CP</div>
+          <div class="value" contenteditable="true" id="statPA">5+</div>
+        </div>
+        <div class="stat">
+          <div class="label">AR</div>
+          <div class="value" contenteditable="true" id="statAV">9+</div>
+        </div>
+      </div>
+      <div>
+        <div class="gp editable" contenteditable="true" id="gp">300 000 PO</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="logo">
+        <div class="stat-title editable" contenteditable="true" id="title">TEAM</div>
+      </div>
+
+      <div class="portrait">
+        <img
+          id="figure"
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='600'><rect width='100%' height='100%' fill='%230d4a85'/><g fill='%23f1f1f1' opacity='0.14'><rect x='60' y='420' width='480' height='40' rx='20'/></g><text x='50%' y='50%' fill='%23ffffff' font-size='28' font-family='Arial' dominant-baseline='middle' text-anchor='middle'>Place ton image ici</text></svg>"
+          alt="Figurine"
+        />
+      </div>
+
+      <div class="nameRow">
+        <div>
+          <div class="name editable" contenteditable="true" id="charName">Nom perso</div>
+          <div class="subTitle editable" contenteditable="true" id="subTitle">Poste</div>
+        </div>
+        <div style="text-align:right">
+          <div class="range-box editable" contenteditable="true" id="range">0-4</div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h4>COMPETENCES & TRAITS</h4>
+        <div class="editable" contenteditable="true" id="skills"></div>
+      </div>
+
+      <div class="footer">
+        <div class="text-light" style="font-size:12px;">
+          Designed with ❤️ — modifiable
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Image upload
+    const imgInput = document.getElementById("imgInput");
+    const figure = document.getElementById("figure");
+    imgInput.addEventListener("change", (e) => {
+      const f = e.target.files && e.target.files[0];
+      if (!f) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        figure.src = ev.target.result;
+      };
+      reader.readAsDataURL(f);
+    });
+
+    // Copy HTML
+    document.getElementById("copyHtml").addEventListener("click", async () => {
+      const cardHtml = document.getElementById("card").outerHTML;
+      const blob = new Blob([cardHtml], {
+        type: "text/html",
+      });
+      try {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            "text/html": blob,
+          }),
+        ]);
+        alert("Contenu HTML du composant copié dans le presse-papier.");
+      } catch (e) {
+        const txt = document.createElement("textarea");
+        txt.value = cardHtml;
+        document.body.appendChild(txt);
+        txt.select();
+        document.execCommand("copy");
+        txt.remove();
+        alert("HTML copié (fallback).");
+      }
+    });
+
+    // Export as PNG using html2canvas (CDN)
+    document.getElementById("exportPng").addEventListener("click", async () => {
+      if (!window.html2canvas) {
+        const s = document.createElement("script");
+        s.src =
+          "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+        document.head.appendChild(s);
+        s.onload = () => exportNow();
+      } else {
+        exportNow();
+      }
+      function exportNow() {
+        const card = document.getElementById("card");
+        html2canvas(card, {
+          backgroundColor: null,
+          scale: 2,
+        })
+          .then((canvas) => {
+            const a = document.createElement("a");
+            a.download =
+              (document.getElementById("charName").textContent.trim() || "carte") +
+              ".png";
+            a.href = canvas.toDataURL("image/png");
+            a.click();
+          })
+          .catch((err) => {
+            alert("Erreur lors de l'export : " + err.message);
+          });
+      }
+    });
+
+    // Prevent new lines except in skills (box)
+    document.querySelectorAll("[contenteditable]").forEach((el) => {
+      el.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") {
+          ev.preventDefault();
+          if (el.closest(".box")) {
+            document.execCommand("insertLineBreak");
+          } else {
+            el.blur();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
 
